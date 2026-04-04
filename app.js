@@ -23,9 +23,7 @@ const i18n = {
         thShares: "Шары (A/R)",
         thStatus: "Статус",
         statusOnline: "ОНЛАЙН",
-        statusOffline: "ОФФЛАЙН",
-        updatePrefix: "Обновлено: ",
-        realTime: "(в реальном времени)"
+        statusOffline: "ОФФЛАЙН"
     },
     en: {
         thUptime: "Complexity",
@@ -50,14 +48,11 @@ const i18n = {
         thShares: "Shares (A/R)",
         thStatus: "Status",
         statusOnline: "ONLINE",
-        statusOffline: "OFFLINE",
-        updatePrefix: "Updated: ",
-        realTime: "(Real-time)"
+        statusOffline: "OFFLINE"
     }
 };
 
 // --- Состояние приложения ---
-// Берем язык из памяти браузера, если его нет — ставим 'ru'
 let currentLang = localStorage.getItem('selectedLang') || 'ru'; 
 let currentTheme = 'dark';
 let lastFetchedResult = null; 
@@ -164,6 +159,21 @@ function formatHashrate(hs) {
     return h.toFixed(2) + ' H/s';
 }
 
+function resetChart() {
+    hashrateChart.data.labels = [];
+    hashrateChart.data.datasets[0].data = [];
+    hashrateChart.update();
+}
+
+function showError(msg) {
+    const errEl = document.getElementById('errorMessage');
+    if (errEl) {
+        errEl.innerText = msg;
+        errEl.style.display = 'block';
+        setTimeout(() => errEl.style.display = 'none', 5000);
+    }
+}
+
 // --- Логика интерфейса ---
 function updateLanguageUI() {
     const t = i18n[currentLang];
@@ -193,27 +203,16 @@ function updateLanguageUI() {
     const btnText = document.getElementById('btnSearchText');
     if (btnText) btnText.innerText = t.btnSearch;
 
-    const lastUpd = document.getElementById('lastUpdate');
-    if (lastUpd && !currentUsername) lastUpd.innerText = t.waiting;
-
     updateChartTheme();
 }
 
 function toggleLang() {
     currentLang = (currentLang === 'ru') ? 'en' : 'ru';
-    
-    // Сохраняем выбор, чтобы при перезагрузке не слетал
     localStorage.setItem('selectedLang', currentLang);
-    
     const langLabel = document.getElementById('langLabel');
     if (langLabel) langLabel.innerText = currentLang.toUpperCase();
-    
     updateLanguageUI();
-    
-    // Мгновенно перерисовываем таблицу из памяти без обращения к сети
-    if (lastFetchedResult) {
-        updateUI(lastFetchedResult, false); 
-    }
+    if (lastFetchedResult) updateUI(lastFetchedResult, false); 
 }
 
 function toggleTheme() {
@@ -232,12 +231,21 @@ function updateChartTheme() {
     const style = getComputedStyle(document.body);
     const color = style.getPropertyValue('--duino-yellow').trim() || '#F4B400';
     const text = style.getPropertyValue('--text-muted').trim() || '#888';
-    
     hashrateChart.data.datasets[0].borderColor = color;
     hashrateChart.data.datasets[0].pointHoverBorderColor = color;
     hashrateChart.options.scales.x.ticks.color = text;
     hashrateChart.options.scales.y.ticks.color = text;
     hashrateChart.update('none');
+}
+
+function startAutoUpdate() {
+    if (updateInterval) clearInterval(updateInterval);
+    updateInterval = setInterval(() => fetchDuinoData(true), 15000);
+}
+
+function stopAutoUpdate() {
+    if (updateInterval) clearInterval(updateInterval);
+    updateInterval = null;
 }
 
 async function fetchDuinoData(isAuto = false) {
@@ -274,9 +282,6 @@ async function fetchDuinoData(isAuto = false) {
 
         lastFetchedResult = userRes.result;
         updateUI(userRes.result, true); 
-        
-        const dot = document.getElementById('statusDot');
-        if (dot) dot.classList.add('active');
         
         if (isFirstLoad) { startAutoUpdate(); isFirstLoad = false; }
     } catch (err) {
@@ -320,17 +325,11 @@ function updateUI(res, shouldUpdateChart = true) {
     const bal = parseFloat(res.balance.balance) || 0;
     const balEl = document.getElementById('footerBalance');
     const usdEl = document.getElementById('footerUsd');
-    const updEl = document.getElementById('lastUpdate');
 
     if (balEl) balEl.innerText = bal.toFixed(2); 
-    if (usdEl) {
-        usdEl.innerText = `$${(bal * cachedPrice).toFixed(4)}`; 
-    }
+    if (usdEl) usdEl.innerText = `$${(bal * cachedPrice).toFixed(4)}`; 
     
     if (shouldUpdateChart) {
-        const timeNow = new Date().toLocaleTimeString();
-        if (updEl) updEl.innerText = `${t.updatePrefix}${timeNow} ${t.realTime}`;
-
         const labelTime = new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit', second:'2-digit'});
         hashrateChart.data.labels.push(labelTime);
         hashrateChart.data.datasets[0].data.push(totalHR);
@@ -355,10 +354,6 @@ function updateUI(res, shouldUpdateChart = true) {
                 const eff = total > 0 ? (accepted / total * 100) : (hr > 0 ? 100 : 0);
                 const color = eff > 95 ? 'var(--duino-green)' : (eff > 80 ? 'var(--duino-yellow)' : 'var(--duino-red)');
 
-                // Цветовая индикация шар (A/R)
-                const accStyle = `color: var(--duino-green); font-weight: bold;`;
-                const rejStyle = rejected > 0 ? `color: var(--duino-red); font-weight: bold;` : `color: var(--text-muted);`;
-
                 return `<tr>
                     <td><strong>${escapeHTML(m.identifier)}</strong></td>
                     <td><span style="color:var(--duino-yellow)">${escapeHTML(m.algorithm)}</span></td>
@@ -368,7 +363,7 @@ function updateUI(res, shouldUpdateChart = true) {
                         <div class="efficiency-bar-bg"><div class="efficiency-bar-fill" style="width:${eff}%; background:${color}"></div></div>
                     </td>
                     <td>
-                        <span style="${accStyle}">${accepted}</span> / <span style="${rejStyle}">${rejected}</span>
+                        <span style="color: var(--duino-green); font-weight: bold;">${accepted}</span> / <span style="${rejected > 0 ? 'color: var(--duino-red); font-weight: bold;' : 'color: var(--text-muted);'}">${rejected}</span>
                     </td>
                     <td><span style="color:var(--text-muted)">${m.diff || '---'}</span></td> 
                     <td><span class="status-badge ${hr > 0 ? 'online' : 'offline'}">${hr > 0 ? t.statusOnline : t.statusOffline}</span></td>
@@ -378,7 +373,9 @@ function updateUI(res, shouldUpdateChart = true) {
     }
 }
 
-// При загрузке страницы инициализируем язык и интерфейс
+document.getElementById('searchBtn')?.addEventListener('click', () => fetchDuinoData(false));
+document.getElementById('usernameInput')?.addEventListener('keypress', (e) => { if (e.key === 'Enter') fetchDuinoData(false); });
+
 document.addEventListener('DOMContentLoaded', () => {
     const langLabel = document.getElementById('langLabel');
     if (langLabel) langLabel.innerText = currentLang.toUpperCase();
