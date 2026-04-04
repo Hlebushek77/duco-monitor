@@ -1,4 +1,4 @@
-# Hleb Duico Web Monitoring
+# Hleb Duco Web Monitoring
 <img src="images/Hleb.png" alt="Logo" id="siteLogo">
 A real-time monitor for Duino-Coin miners.
 - **Created with the help of AI!**
