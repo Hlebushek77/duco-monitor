@@ -1,11 +1,7 @@
 // --- Переводы ---
 const i18n = {
     ru: {
-        thUptime: "Время работы",
-        unitDay: "д",
-        unitHour: "ч",
-        unitMin: "м",
-        unitSec: "с", // <-- Запятая здесь была пропущена!
+        thUptime: "Сложность",
         placeholder: "Введите никнейм DUCO...",
         btnSearch: "Поиск",
         waiting: "Ожидание ввода...",
@@ -32,11 +28,7 @@ const i18n = {
         realTime: "(в реальном времени)"
     },
     en: {
-        thUptime: "Uptime",
-        unitDay: "d",
-        unitHour: "h",
-        unitMin: "m",
-        unitSec: "s", // <-- И здесь тоже
+        thUptime: "Complexity",
         placeholder: "Enter DUCO username...",
         btnSearch: "Search",
         waiting: "Waiting for input...",
@@ -64,10 +56,11 @@ const i18n = {
     }
 };
 
-// Состояние приложения
-let currentLang = 'ru';
+// --- Состояние приложения ---
+// Берем язык из памяти браузера, если его нет — ставим 'ru'
+let currentLang = localStorage.getItem('selectedLang') || 'ru'; 
 let currentTheme = 'dark';
-let lastFetchedResult = null;
+let lastFetchedResult = null; 
 let currentUsername = '';
 let updateInterval = null;
 let isFirstLoad = true;
@@ -153,7 +146,6 @@ const hashrateChart = new Chart(ctx, {
                 ticks: { 
                     color: '#888', 
                     font: { size: 10, family: 'Roboto Mono' },
-                    // Убрано сокращение до "k", чтобы видеть полные цифры хешрейта на осях
                     callback: (value) => value 
                 }
             }
@@ -170,24 +162,6 @@ function formatHashrate(hs) {
     if (h >= 1e6) return (h / 1e6).toFixed(2) + ' MH/s';
     if (h >= 1e3) return (h / 1e3).toFixed(2) + ' kH/s';
     return h.toFixed(2) + ' H/s';
-}
-
-function formatUptime(seconds) {
-    if (!seconds || seconds < 0) return "---";
-    
-    // Берем текущие переводы из объекта i18n
-    const t = i18n[currentLang]; 
-    
-    const s = parseInt(seconds);
-    const d = Math.floor(s / 86400);
-    const h = Math.floor((s % 86400) / 3600);
-    const m = Math.floor((s % 3600) / 60);
-    const sec = s % 60;
-
-    // Используем ключи unitDay, unitHour и т.д., которые мы добавили в i18n
-    if (d > 0) return `${d}${t.unitDay} ${h}${t.unitHour}`;
-    if (h > 0) return `${h}${t.unitHour} ${m}${t.unitMin}`;
-    return `${m}${t.unitMin} ${sec}${t.unitSec}`;
 }
 
 // --- Логика интерфейса ---
@@ -222,15 +196,24 @@ function updateLanguageUI() {
     const lastUpd = document.getElementById('lastUpdate');
     if (lastUpd && !currentUsername) lastUpd.innerText = t.waiting;
 
-    if (lastFetchedResult) (lastFetchedResult, false);
     updateChartTheme();
 }
 
 function toggleLang() {
     currentLang = (currentLang === 'ru') ? 'en' : 'ru';
+    
+    // Сохраняем выбор, чтобы при перезагрузке не слетал
+    localStorage.setItem('selectedLang', currentLang);
+    
     const langLabel = document.getElementById('langLabel');
     if (langLabel) langLabel.innerText = currentLang.toUpperCase();
+    
     updateLanguageUI();
+    
+    // Мгновенно перерисовываем таблицу из памяти без обращения к сети
+    if (lastFetchedResult) {
+        updateUI(lastFetchedResult, false); 
+    }
 }
 
 function toggleTheme() {
@@ -339,11 +322,9 @@ function updateUI(res, shouldUpdateChart = true) {
     const usdEl = document.getElementById('footerUsd');
     const updEl = document.getElementById('lastUpdate');
 
-    if (balEl) balEl.innerText = bal; 
+    if (balEl) balEl.innerText = bal.toFixed(2); 
     if (usdEl) {
-        // Убрано ограничение .toFixed(6) и удален текст ↓ -0.2%
-        // Теперь выводится полная цифра баланса в долларах
-        usdEl.innerText = `$${bal * cachedPrice}`; 
+        usdEl.innerText = `$${(bal * cachedPrice).toFixed(4)}`; 
     }
     
     if (shouldUpdateChart) {
@@ -361,10 +342,9 @@ function updateUI(res, shouldUpdateChart = true) {
         hashrateChart.update('active');
     }
 
-   const tbody = document.getElementById('workersTableBody');
+    const tbody = document.getElementById('workersTableBody');
     if (tbody) {
         if (!miners.length) {
-            // Тут меняем colspan с 6 на 7, так как колонок стало больше
             tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:30px; color:var(--text-muted)">${t.noMiners}</td></tr>`;
         } else {
             tbody.innerHTML = miners.map(m => {
@@ -374,7 +354,11 @@ function updateUI(res, shouldUpdateChart = true) {
                 const total = accepted + rejected;
                 const eff = total > 0 ? (accepted / total * 100) : (hr > 0 ? 100 : 0);
                 const color = eff > 95 ? 'var(--duino-green)' : (eff > 80 ? 'var(--duino-yellow)' : 'var(--duino-red)');
-                
+
+                // Цветовая индикация шар (A/R)
+                const accStyle = `color: var(--duino-green); font-weight: bold;`;
+                const rejStyle = rejected > 0 ? `color: var(--duino-red); font-weight: bold;` : `color: var(--text-muted);`;
+
                 return `<tr>
                     <td><strong>${escapeHTML(m.identifier)}</strong></td>
                     <td><span style="color:var(--duino-yellow)">${escapeHTML(m.algorithm)}</span></td>
@@ -383,14 +367,24 @@ function updateUI(res, shouldUpdateChart = true) {
                         <div style="font-size:11px; color:${color}">${eff.toFixed(1)}%</div>
                         <div class="efficiency-bar-bg"><div class="efficiency-bar-fill" style="width:${eff}%; background:${color}"></div></div>
                     </td>
-                    <td>${accepted} / ${rejected}</td>
-                    <td>${formatUptime(m.diff)}</td> 
+                    <td>
+                        <span style="${accStyle}">${accepted}</span> / <span style="${rejStyle}">${rejected}</span>
+                    </td>
+                    <td><span style="color:var(--text-muted)">${m.diff || '---'}</span></td> 
                     <td><span class="status-badge ${hr > 0 ? 'online' : 'offline'}">${hr > 0 ? t.statusOnline : t.statusOffline}</span></td>
                 </tr>`;
             }).join('');
         }
     }
 }
+
+// При загрузке страницы инициализируем язык и интерфейс
+document.addEventListener('DOMContentLoaded', () => {
+    const langLabel = document.getElementById('langLabel');
+    if (langLabel) langLabel.innerText = currentLang.toUpperCase();
+    updateLanguageUI();
+});
+
 function handleSearch() {
     isFirstLoad = true;
     fetchDuinoData(false);
