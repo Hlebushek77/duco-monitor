@@ -33,7 +33,7 @@ The monitor calls the official [Duino-Coin API](https://server.duinocoin.com/api
 ### ✨ Key Features
 - 📈 **Live Charts:** Dynamic hashrate graphs (Plotly/Chart.js).
 - 💰 **Wallet Info:** Current balance with instant USD conversion.
-- 👷 **Worker Insights:** Comprehensive list of active miners with detailed info.
+- 👷 **Worker Insights:** Comprehensive list of active miners with info.
 - 🎨 **Modern UI:** Clean, responsive design (mobile-friendly).
 
 ### 🚀 Quick Start
@@ -52,7 +52,7 @@ Just visit the link: [hlebushek77.github.io/Hleb-Duco-Monitor/](https://hlebushe
 ### ✨ Ключевые особенности
 - 📈 **Live Charts:** Динамические графики хешрейта (Plotly/Chart.js).
 - 💰 **Wallet Info:** Текущий баланс с мгновенной конвертацией в USD.
-- 👷 **Worker Insights:** Полный список активных майнеров с детальной инфой.
+- 👷 **Worker Insights:** Полный список активных майнеров с инфой.
 - 🎨 **Modern UI:** Чистый, адаптивный дизайн (удобно смотреть с телефона).
 
 ### 🚀 Быстрый старт
