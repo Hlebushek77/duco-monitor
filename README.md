@@ -6,6 +6,7 @@
 </p>
 
 <p align="center">
+  <img src="https://img.shields.io/badge/Version-0.0.1-blue" alt="Version">
   <img src="https://img.shields.io/badge/Status-Active-brightgreen" alt="Status">
   <img src="https://img.shields.io/badge/Maintained%3F-yes-blue.svg" alt="Maintained">
   <img src="https://img.shields.io/badge/Made%20with-AI-orange" alt="AI">
