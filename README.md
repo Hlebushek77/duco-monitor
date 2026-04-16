@@ -1,44 +1,48 @@
+<div align="center">
+
 # 🍞 Hleb Duco Web Monitoring
+
 > **Real-time web interface for monitoring Duino-Coin mining.**
 > **Веб-интерфейс для мониторинга майнинга Duino-Coin в реальном времени.**
 
-<p align="center">
-  <img src="images/Hleb.png" alt="Logo" width="180" style="border-radius: 50%; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
-</p>
+<br>
+
+<img src="images/Hleb.png" alt="Logo" width="160" style="border-radius: 50%;">
+
+<br>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Version-0.0.1-blue" alt="Version">
+  <img src="https://img.shields.io/badge/Version-0.0.1-orange" alt="Version">
   <img src="https://img.shields.io/badge/Status-Active-brightgreen" alt="Status">
   <img src="https://img.shields.io/badge/Maintained%3F-yes-blue.svg" alt="Maintained">
-  <img src="https://img.shields.io/badge/Made%20with-AI-orange" alt="AI">
+  <img src="https://img.shields.io/badge/Made%20with-AI-red" alt="AI">
   <img src="https://img.shields.io/badge/Currency-DUCO%20%2F%20USD-yellow" alt="Currency">
-  <img src="https://img.shields.io/badge/License-MIT-brightgreen" alt="License">
+  <img src="https://img.shields.io/badge/License-MIT-lightgrey" alt="License">
 </p>
 
----
-
-## 🌍 Language / Язык
-- [English Version](#english-version)
-- [Русская версия](#русская-версия)
+<img src="images/GL.png" width="100%" style="max-height: 250px; object-fit: cover; border-radius: 12px;" alt="Hleb Duco Monitor Banner">
 
 ---
+
+[🌐 English Version](#english-version) • [🇷🇺 Русская версия](#русская-версия)
+
+</div>
+
+<br>
 
 ## English Version
 
 ### 🌟 About the Project
 **Hleb Duco Monitor** is a lightweight and fast solution for keeping your rigs under control. No more refreshing your wallet page: charts and statistics update automatically.
 
-### ⚙️ How it Works
-The monitor calls the official [Duino-Coin API](https://github.com/duino-coin/duco-rest-api) every 30 seconds. This provides real-time updates for your balance and worker status without page reloads.
+### 🚀 Quick Start
+Just visit the link: [**hlebushek77.github.io/Hleb-Duco-Monitor/**](https://hlebushek77.github.io/Hleb-Duco-Monitor/)
 
 ### ✨ Key Features
-- 📈 **Live Charts:** Dynamic hashrate graphs (Plotly/Chart.js).
-- 💰 **Wallet Info:** Current balance with instant USD conversion.
-- 👷 **Worker Insights:** Comprehensive list of active miners with info.
-- 🎨 **Modern UI:** Clean, responsive design (mobile-friendly).
-
-### 🚀 Quick Start
-Just visit the link: [hlebushek77.github.io/Hleb-Duco-Monitor/](https://hlebushek77.github.io/Hleb-Duco-Monitor/)
+* 📈 **Live Charts:** Dynamic hashrate graphs (Plotly/Chart.js).
+* 💰 **Wallet Info:** Current balance with instant USD conversion.
+* 👷 **Worker Insights:** Comprehensive list of active miners.
+* 🎨 **Modern UI:** Clean, responsive design (mobile-friendly).
 
 ---
 
@@ -47,17 +51,14 @@ Just visit the link: [hlebushek77.github.io/Hleb-Duco-Monitor/](https://hlebushe
 ### 🌟 О проекте
 **Hleb Duco Monitor** — это легкое и быстрое решение для тех, кто хочет держать свои риги под контролем. Больше не нужно вручную обновлять страницу кошелька: графики и статистика обновляются автоматически.
 
-### ⚙️ Как это работает
-Мониторинг обращается к официальному [Duino-Coin API](https://github.com/duino-coin/duco-rest-api) каждые 30 секунд. Это позволяет получать актуальный баланс и статус ваших воркеров в режиме реального времени без необходимости перезагрузки страницы.
+### 🚀 Быстрый старт
+Перейдите по ссылке: [**hlebushek77.github.io/Hleb-Duco-Monitor/**](https://hlebushek77.github.io/Hleb-Duco-Monitor/)
 
 ### ✨ Ключевые особенности
-- 📈 **Live Charts:** Динамические графики хешрейта (Plotly/Chart.js).
-- 💰 **Wallet Info:** Текущий баланс с мгновенной конвертацией в USD.
-- 👷 **Worker Insights:** Полный список активных майнеров с инфой.
-- 🎨 **Modern UI:** Чистый, адаптивный дизайн (удобно смотреть с телефона).
-
-### 🚀 Быстрый старт
-Просто перейдите по ссылке: [hlebushek77.github.io/Hleb-Duco-Monitor/](https://hlebushek77.github.io/Hleb-Duco-Monitor/)
+* 📈 **Live Charts:** Динамические графики хешрейта.
+* 💰 **Wallet Info:** Баланс с мгновенной конвертацией в USD.
+* 👷 **Worker Insights:** Полный список активных майнеров.
+* 🎨 **Modern UI:** Чистый, адаптивный дизайн для смартфонов.
 
 ---
 
@@ -80,12 +81,11 @@ Just visit the link: [hlebushek77.github.io/Hleb-Duco-Monitor/](https://hlebushe
 ---
 
 ## 🏆 Credits / Благодарности
-This project was created and designed with the help of: / Проект был создан при поддержке:
-* 🤖 **Gemini AI** — code architecture, logic, and UI design. / архитектура кода, логика и дизайн.
-* 🍞 **Duino-Coin Team** — for the amazing ecosystem and open API./ за крутую экосистему и открытый API.
+* 🤖 **Gemini AI** — code architecture, logic, and UI design.
+* 🍞 **Duino-Coin Team** — for the amazing ecosystem and open API.
 
----
+<br>
 
-<p align="center">
-  <b>⭐ If you find this project useful, please give it a star! / Поставьте звезду проекту, если он вам полезен!</b>
-</p>
+<div align="center">
+  <b>⭐ If you find this project useful, please give it a star! / Поставьте звезду проекту!</b>
+</div>
