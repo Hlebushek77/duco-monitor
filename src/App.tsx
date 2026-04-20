@@ -407,7 +407,7 @@ export default function App() {
       <header className="flex flex-col sm:flex-row justify-between items-center mb-6 pb-5 border-b border-[var(--header-border)] gap-5">
         <div className="flex items-center gap-3 w-full sm:w-auto">
           <img 
-            src="/images/Hleb.png" 
+            src="images/Hleb.png" 
             alt="Hleb Logo" 
             className="h-10 w-auto object-contain" 
             onError={(e) => (e.target as HTMLImageElement).src = "https://picsum.photos/seed/duino/64/64"} 
