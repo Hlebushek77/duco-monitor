@@ -1,6 +1,6 @@
 {
   "name": "Hleb Duino-Coin Monitor",
-  "description": "Professional Duino-Coin monitoring dashboard with mining stats, hashrate dynamics, and AI rig analysis.",
+  "description": "Professional Duino-Coin monitoring dashboard with real-time statistics, hashrate dynamics, and account details.",
   "requestFramePermissions": [],
   "majorCapabilities": []
 }
