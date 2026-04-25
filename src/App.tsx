@@ -457,30 +457,15 @@ export default function App() {
   return (
     <div className="max-w-7xl mx-auto p-4 sm:p-5 min-h-screen flex flex-col font-sans">
       <header className="flex flex-col sm:flex-row justify-between items-center mb-6 pb-5 border-b border-[var(--header-border)] gap-5">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[var(--duino-yellow)] to-[var(--duino-yellow-dim)] p-0.5 shadow-lg shadow-[var(--duino-yellow-dim)]/20">
-              <div className="w-full h-full rounded-[10px] bg-[var(--bg-main)] flex items-center justify-center overflow-hidden">
-                <img 
-                  src="/Hleb.png" 
-                  alt="Hleb Logo" 
-                  className="w-8 h-8 object-contain" 
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    if (target.src.endsWith('/Hleb.png')) {
-                      target.src = '/public/Hleb.png'; // Try alternate path
-                    } else if (target.src.endsWith('/public/Hleb.png')) {
-                      target.src = '/images/Hleb.png';
-                    } else {
-                      target.src = "https://picsum.photos/seed/duino/64/64";
-                    }
-                  }} 
-                />
-              </div>
-            </div>
-            <h1 className="text-2xl font-black tracking-tight text-white whitespace-nowrap">
-              {t.title.split(' ')[0]} <span className="text-[var(--duino-yellow)]">{t.title.split(' ').slice(1).join(' ')}</span>
-            </h1>
-          </div>
+        <div className="flex items-center gap-3 w-full sm:w-auto">
+          <img 
+            src="/Hleb.png" 
+            alt="Hleb Logo" 
+            className="h-10 w-auto object-contain" 
+            onError={(e) => (e.target as HTMLImageElement).src = "https://picsum.photos/seed/duino/64/64"} 
+          />
+          <h1 className="text-2xl font-bold tracking-tight text-[var(--duino-yellow)] whitespace-nowrap">{t.title}</h1>
+        </div>
 
         <div className="flex items-center gap-2 order-2 sm:order-none">
           <button 
